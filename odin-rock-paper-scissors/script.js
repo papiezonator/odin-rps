@@ -1,4 +1,3 @@
-
 //"computer" randomly choosing one of three options 
 function getComputerChoice(){
     let choice = Math.floor(Math.random() * 3);
@@ -17,27 +16,30 @@ function getComputerChoice(){
     }     
 }
 
-//player choice
-function getHumanChoice(){
-    let choice = document.querySelector("#action").value;
-    //prompt("Choose: rock, paper, scissors");
+let choice = '';
+
+let playedRounds = 0;
+
+let rockChoice = document.querySelector("#rockButton");
+rockChoice.addEventListener("click", () => {
+    choice = rockChoice.name;
+
+    playGame();
+    })
+
+let paperChoice = document.querySelector("#paperButton");    
+paperChoice.addEventListener("click", () => {
+    choice = paperChoice.name;
+
+    playGame();
+})
+
+let scissorsChoice = document.querySelector("#scissorsButton");
+scissorsChoice.addEventListener("click", () => {
+    choice = scissorsChoice.name;
     
-    choice = choice.toLowerCase();
-        switch(choice){
-            case 'rock':
-                return choice;
-                
-            case 'paper':
-                return choice;
-                
-            case 'scissors':
-                return choice;
-                
-            default:
-                console.log("Wrong input!");
-                break;
-        }
-}
+    playGame();
+})
 
 //default score
 let humanScore = 0;
@@ -45,11 +47,7 @@ let computerScore = 0;
 
 //dom manipulation****************************************************************
 
-const button = document.querySelector("#actionButton");
 
-button.addEventListener("click", () => {
-    playGame();
-});
 
 
 
@@ -61,6 +59,7 @@ button.addEventListener("click", () => {
 function playRound(humanChoice, computerChoice){
       
         // ROCK // 
+        humanChoice = choice;
 
         if(humanChoice == 'rock' && computerChoice == 'scissors'){
             humanScore++;
@@ -80,10 +79,14 @@ function playRound(humanChoice, computerChoice){
         
         } else if (humanChoice == 'scissors' && computerChoice == 'paper'){
             humanScore++;
+            console.log(humanChoice);
         } else if (humanChoice == 'scissors' && computerChoice == 'rock'){
             computerScore++;
+            console.log(humanChoice);
         } else if(humanChoice == 'scissors' && computerChoice == 'scissors'){ 
         }
+
+        playedRounds++       
 }
 
 
@@ -97,13 +100,9 @@ function playGame(){
     const result = document.createElement("p");
     const divScore = document.querySelector(".scoreSpace"); 
     
-    for (let i = 0; i < 5; i++){
-        let humanSelection = getHumanChoice();
+        let humanSelection = choice;
         let computerSelection = getComputerChoice();
         playRound(humanSelection, computerSelection);
-
-        const divScore = document.querySelector(".scoreSpace");
-
 
         let humanScoreInfo = document.createElement("p");
         divScore.appendChild(humanScoreInfo);
@@ -113,11 +112,7 @@ function playGame(){
         divScore.appendChild(computerScoreInfo);
         computerScoreInfo.textContent = `Computer score: ${computerScore}`;
         
-
-        console.log("Human score: ", humanScore);
-        console.log("Computer score: ", computerScore); 
-    }
-    if(computerScore > humanScore) {
+    if(computerScore > humanScore && playedRounds == 5) {
             
             divScore.appendChild(result);
             result.textContent = "The computer has won!";
